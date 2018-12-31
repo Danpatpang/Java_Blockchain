@@ -11,8 +11,7 @@ public class SignatureUtil {
 
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            digest.update(input.getBytes("UTF-8"));
-            hash = digest.digest();
+            hash = digest.digest(input.getBytes("UTF-8"));
 
             for (int i = 0; i < hash.length; i++) {
                 String hex = Integer.toString((0xff & hash[i]) + 0x100, 16).substring(1);

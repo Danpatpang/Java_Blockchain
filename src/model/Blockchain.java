@@ -18,8 +18,9 @@ public class Blockchain {
         blockchain.add(new Block(data, blockchain.get(blockchain.size() - 1).hash));
     }
 
-    public Boolean isValidChain() {
+    public Boolean isValidChain(int difficulty) {
         Block currentBlock, previousBlock;
+        String target = new String(new char[difficulty]).replace('\0', '0');
 
         for (int i = 1; i < blockchain.size(); i++) {
             currentBlock = blockchain.get(i);
@@ -32,6 +33,11 @@ public class Blockchain {
 
             if (!currentBlock.previousHash.equals(previousBlock.hash)) {
                 System.out.println("PreviousHash is not equal");
+                return false;
+            }
+
+            if(!currentBlock.hash.substring(0, difficulty).equals(target)){
+                System.out.println("Block has not mined");
                 return false;
             }
         }
