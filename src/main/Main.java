@@ -8,6 +8,7 @@ public class Main {
         Blockchain danpatChain = new Blockchain();
         int difficulty = 5;
 
+        // 블록 채굴
         danpatChain.add("first block");
         System.out.println("try...");
         danpatChain.blockchain.get(0).mineBlock(difficulty);
@@ -20,8 +21,11 @@ public class Main {
         System.out.println("try...");
         danpatChain.blockchain.get(2).mineBlock(difficulty);
 
+        // 체인 조회
         String jsonData = new GsonBuilder().setPrettyPrinting().create().toJson(danpatChain.blockchain);
         System.out.println(jsonData);
+
+        // 유효성 검증
         System.out.println(danpatChain.isValidChain(difficulty));
     }
 }
