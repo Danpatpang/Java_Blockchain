@@ -38,4 +38,8 @@ public class Wallet {
             e.printStackTrace();
         }
     }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
 }
