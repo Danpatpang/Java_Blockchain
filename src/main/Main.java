@@ -2,30 +2,21 @@ package main;
 
 import com.google.gson.GsonBuilder;
 import model.Blockchain;
+import model.Wallet;
+import services.Transaction;
+import utils.SignatureUtil;
 
 public class Main {
     public static void main(String[] args) {
-        Blockchain danpatChain = new Blockchain();
-        int difficulty = 5;
+        Wallet walletA = new Wallet();
+        Wallet walletB = new Wallet();
 
-        // 블록 채굴
-        danpatChain.add("first block");
-        System.out.println("try...");
-        danpatChain.blockchain.get(0).mineBlock(difficulty);
+        System.out.println("privateKey & publicKey");
+        System.out.println(SignatureUtil.getStringFromKey(walletA.getPrivateKey()));
+        System.out.println(SignatureUtil.getStringFromKey(walletA.publicKey));
 
-        danpatChain.add("second block");
-        System.out.println("try...");
-        danpatChain.blockchain.get(1).mineBlock(difficulty);
-
-        danpatChain.add("third block");
-        System.out.println("try...");
-        danpatChain.blockchain.get(2).mineBlock(difficulty);
-
-        // 체인 조회
-        String jsonData = new GsonBuilder().setPrettyPrinting().create().toJson(danpatChain.blockchain);
-        System.out.println(jsonData);
-
-        // 유효성 검증
-        System.out.println(danpatChain.isValidChain(difficulty));
+        Transaction transaction = new Transaction(walletA.publicKey, walletB.publicKey, 5);
+        transaction.generateSignature(walletA.getPrivateKey());
+        System.out.println(transaction.verifySignature());
     }
 }
