@@ -1,8 +1,8 @@
 package utils;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
+import java.util.Base64;
 
 /**
  * 전자 서명 생성 기능을 지원.
@@ -33,5 +33,47 @@ public class SignatureUtil {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static byte[] applyECDSA(PrivateKey privateKey, String input) {
+        try {
+            Signature signature = Signature.getInstance("ECDSA", "BC");
+            signature.initSign(privateKey);
+            signature.update(input.getBytes());
+
+            return signature.sign();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean verifyECDSA(PublicKey publicKey, String data, byte[] signature) {
+        try {
+            Signature ECDSAVerify = Signature.getInstance("ECDSA", "BC");
+            ECDSAVerify.initVerify(publicKey);
+            ECDSAVerify.update(data.getBytes());
+
+            return ECDSAVerify.verify(signature);
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        } catch (SignatureException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getStringFromKey(Key key) {
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 }
